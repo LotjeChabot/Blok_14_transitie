@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Aantal toeristen 2014 t.o.v. 2013</title>
+	<script src="http://d3js.org/d3.v3.min.js"> </script>
+
+
+</head>
+
+<body>
+	<H1>
+		<CENTER>
+			<FONT face="Rockwell">Meest bezochte Europese vakantie landen</font>
+		</CENTER>
+	</H1>
+	<P align="center"> <FONT size="5" face="Rockwell"> 2014 t.o.v. 2013 </FONT> </P>
+	<P align="center"><Font size="4" face="Rockwell"> In deze visualisatie zie je 9 populaire vakantie bestemmingen. Wanneer het bolletje
+	begint te bewegen, laat hij op het eind het aantal toeristen in 2014 zien. Na een korte stop schuift het bolletje door en verandert
+	de kleur. Op dit punt zie je het aantal toeristen in 2013. Alle aantallen zijn x100.000.</font></P>
+	<br><P> <FONT size="1" face="Rockwell">http://en.wikipedia.org/wiki/World_Tourism_rankings#Europe</font></p>
+	
+	<script>
+	var width = 950;
+	var height = 10;
+		
+	var widthScale = d3.scale.linear()
+					.domain([0,980])
+					.range([0, width]);
+					
+	var axis = d3.svg.axis()
+					.ticks(10)
+					.scale(widthScale);
+					
+	var canvas = d3.select("body")
+					.append("svg")
+					.attr("width", width)
+					.attr("height", height)
+					
+	d3.csv('aantallen.csv',function(data){
+	var canvas = d3.select("body")
+				.append("svg")
+				.attr("width",1000)
+				.attr("height",900);
+	
+	canvas.selectAll("text")
+		.data(data)
+		.enter()
+			.append("text")
+			.attr("fill","black")
+			.attr("y",function(d, i){return i*90+50;})
+			.text (function(d) {return d.Land;})
+	
+ 
+	canvas.selectAll("circle")
+		.data(data)
+		.enter()
+			.append("circle")
+			.attr("cx",100)
+			.attr("cy",function(d, i){return i*90+50})
+			.attr("r",25)
+			.attr("fill","blue");
+				
+	
+	canvas.selectAll("circle")
+		.transition()
+		.duration(4000)
+		.delay(1000)
+		.attr("cx",function(d) {return d.jaar1;})
+		.transition()
+		.attr("cx",function(d) {return d.jaar2;})
+		.each("end",function() {d3.select(this).attr("fill","red");});
+		
+		canvas.append("g")
+			.attr("transform", "translate(100, 850)")
+			.call(axis);
+});
+				
+					
+	</script>
+
+	</body>
+</html>
+			
+				
+				
